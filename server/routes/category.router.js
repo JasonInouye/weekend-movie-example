@@ -18,3 +18,4 @@ router.get('/', (req, res) => {
 });
 
 module.exports = router;
+// http://api.giphy.com/v1/gifs/random?api_key=${process.env.GIPHY_API_KEY}`
