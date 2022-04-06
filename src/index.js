@@ -14,21 +14,42 @@ import { HashRouter as Router, Route } from 'react-router-dom';
 
 function* sagaWatcher() {
     yield takeEvery('FETCH_GIPHYS', fetchGiphys);
+    yield takeEvery('GET_FAVORITES', getFavorites);
 }
 
 function* fetchGiphys(action) {
     try {
         let response = yield axios.get(`/api/giphy/${action.payload}`);
         console.log('fetchGiphys: ', response.data);
-        
+
         yield put({
             type: 'SET_GIPHYS',
             payload: response.data.data
         })
     } catch (err) {
         console.log(err);
-        
+
     }
+}
+
+function* getFavorites() {
+    //GET REQUEST!
+    try {
+        let response = yield axios.get('/api/favorite')
+        console.log(response.data);
+        //Dispatch
+        yield put({ type: 'SET_FAVORITES', payload: response.data });
+    } catch (err) {
+        console.log(err)
+    }
+
+}
+
+const giphyFavoriteList = (state = [], action) => {
+    if (action.type === 'SET_FAVORITES') {
+        return action.payload;
+    }
+    return state
 }
 
 const giphySearchList = (state = [], action) => {
@@ -42,7 +63,8 @@ const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(
     combineReducers({
-        giphySearchList
+        giphySearchList,
+        giphyFavoriteList
     }),
     applyMiddleware(sagaMiddleware, logger),
 );
