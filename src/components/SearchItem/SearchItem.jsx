@@ -1,21 +1,22 @@
-import { postgresMd5PasswordHash } from 'pg/lib/utils';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
+// SEARCH ITEM is actually favorite function
 function SearchItem({ searchItem }) {
+    console.log('inside of SearchItem', `${searchItem}` );
 
     const dispatch = useDispatch();
 
     const favoriteItem = () => {
-        dispatch({ type: 'MARK_FAVORITE', payload: props.searchItem.url });
+        dispatch({ type: 'MARK_FAVORITE', payload: searchItem });
     }
 
     return (
             <>
-                <img key={index} src={giphy?.images?.original?.url} />
-                <button onClick={handleSubmit}>favorite</button>
+                <img src={searchItem} />
+                <button onClick={favoriteItem}>favorite</button>
             </>
     )
 }
 
-export default FeedbackItem
+export default SearchItem;
