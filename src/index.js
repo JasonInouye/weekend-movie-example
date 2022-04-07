@@ -15,6 +15,7 @@ function* sagaWatcher() {
     yield takeEvery('FETCH_GIPHYS', fetchGiphys);
     yield takeEvery('FETCH_CATEGORIES', fetchCategories);
     yield takeEvery('SET_CATEGORY', setCategory);
+    yield takeEvery('GET_FAVORITES', getFavorites);
 }
 
 function* setCategory(action) {
@@ -52,8 +53,27 @@ function* fetchGiphys(action) {
         })
     } catch (err) {
         console.log(err);
-        
     }
+}
+
+function* getFavorites() {
+    //GET REQUEST!
+    try {
+        let response = yield axios.get('/api/favorite')
+        console.log(response.data);
+        //Dispatch
+        yield put({ type: 'SET_FAVORITES', payload: response.data });
+    } catch (err) {
+        console.log(err)
+    }
+
+}
+
+const giphyFavoriteList = (state = [], action) => {
+    if (action.type === 'SET_FAVORITES') {
+        return action.payload;
+    }
+    return state
 }
 
 const giphySearchList = (state = [], action) => {
@@ -76,7 +96,8 @@ const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
     combineReducers({
         giphySearchList,
-        giphyCategoryList
+        giphyCategoryList,
+        giphyFavoriteList
     }),
     applyMiddleware(sagaMiddleware, logger),
 );
