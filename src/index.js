@@ -9,26 +9,50 @@ import logger from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
 import { takeEvery, put } from 'redux-saga/effects';
 import axios from 'axios';
-import { HashRouter as Router, Route } from 'react-router-dom';
 
 
 function* sagaWatcher() {
     yield takeEvery('FETCH_GIPHYS', fetchGiphys);
+    yield takeEvery('FETCH_CATEGORIES', fetchCategories);
+    yield takeEvery('SET_CATEGORY', setCategory);
     yield takeEvery('GET_FAVORITES', getFavorites);
+}
+
+function* setCategory(action) {
+    try {
+        yield axios.put(`/api/category`, action.payload);
+        yield put({
+            type: 'FETCH_GIPHYS'
+        })
+    } catch (err) {
+        console.log(err);
+        
+    }
+}
+
+function* fetchCategories() {
+    try {
+        let response = yield axios.get(`/api/category`);
+        
+        yield put({
+            type: 'SET_CATEGORIES',
+            payload: response.data
+        })
+    } catch (err) {
+        console.log(err);
+        
+    }
 }
 
 function* fetchGiphys(action) {
     try {
         let response = yield axios.get(`/api/giphy/${action.payload}`);
-        console.log('fetchGiphys: ', response.data);
-
         yield put({
             type: 'SET_GIPHYS',
             payload: response.data.data
         })
     } catch (err) {
         console.log(err);
-
     }
 }
 
@@ -59,11 +83,20 @@ const giphySearchList = (state = [], action) => {
     return state
 }
 
+const giphyCategoryList = (state = [], action) => {
+    if (action.type === 'SET_CATEGORIES') {
+        return action.payload;
+    }
+    return state
+}
+
+
 const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(
     combineReducers({
         giphySearchList,
+        giphyCategoryList,
         giphyFavoriteList
     }),
     applyMiddleware(sagaMiddleware, logger),

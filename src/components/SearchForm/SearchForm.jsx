@@ -20,10 +20,10 @@ function SearchForm() {
             <div>
             {giphySearchList.map((giphy, index) => {
                 return (
-                    <>
-                    <img key={index} src={giphy?.images?.original?.url} />
+                    <div key={index}>
+                    <img src={giphy?.images?.original?.url} />
                     <button>favorite</button>
-                    </>
+                    </div>
                 );
             })}
             </div>
