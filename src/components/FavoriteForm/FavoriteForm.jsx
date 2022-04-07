@@ -19,13 +19,19 @@ function FavoriteForm() {
         })
     }, []);
 
-    const saveCategory = () => {
+    const saveCategory = (id) => {
+        let addCategory = {
+            id,
+            newCategory
+        }
+
         dispatch({
             type: 'SET_CATEGORY',
-            payload: newCategory
+            payload: addCategory
         })
     }
 
+    
     return (
         <div>
             <h1>favoriting happens here</h1>
@@ -33,8 +39,8 @@ function FavoriteForm() {
             <div>
                 {giphyFavoriteReducer.map((favorite) => {
                     return (
-                        <div>
-                            <img key={favorite.id} src={favorite.url}/> 
+                        <div key={favorite.id}>
+                            <img src={favorite.url}/> 
                             <label htmlFor="categories">Choose a category:</label>
                             <select id="categories" name="categories" onChange={(event) => setNewCategory(event.target.value)}>
                             {categoryList.map(category => {
@@ -46,7 +52,7 @@ function FavoriteForm() {
                                 )
                             })}
                             </select>
-                            <button onClick={saveCategory}>save Category</button>
+                            <button onClick={() => saveCategory(favorite.id)}>save Category</button>
                         </div>
                     );
                 })}

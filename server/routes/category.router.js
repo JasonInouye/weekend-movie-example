@@ -17,17 +17,18 @@ router.get('/', (req, res) => {
     });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/', (req, res) => {
   // return all categories
-
+  let id = req.body.id;
+  let category_id = req.body.newCategory;
 
   const queryText = `
     UPDATE "favorites"
     SET "category_id" = $1
-    WHERE "id" = 1;
+    WHERE "id" = $2;
   `;
 
-  let values = [req.params.id]
+  let values = [category_id, id]
 
   pool
     .query(queryText, values)

@@ -20,7 +20,7 @@ function* sagaWatcher() {
 
 function* setCategory(action) {
     try {
-        yield axios.put(`/api/category/${action.payload}`);
+        yield axios.put(`/api/category`, action.payload);
         yield put({
             type: 'FETCH_GIPHYS'
         })
