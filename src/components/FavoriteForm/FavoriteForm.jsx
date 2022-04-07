@@ -19,27 +19,24 @@ function FavoriteForm() {
             type: 'SET_CATEGORY',
             payload: newCategory
         })
-        console.log(newCategory);
     }
 
     return (
         <div>
             <h1>favoriting happens here</h1>
             
-            <form onSubmit={(event) => setNewCategory(event.target.value)}>
             <label htmlFor="categories">Choose a category:</label>
-                <select id="categories" name="categories">
+                <select id="categories" name="categories" onChange={(event) => setNewCategory(event.target.value)}>
                 {categoryList.map(category => {
                     return (
                         <option 
                             key={category.id} 
-                            value={category.name}
+                            value={category.id}
                         >{category.name}</option>
                     )
                 })}
                 </select>
-            <button type="submit">save Category</button>
-            </form>
+            <button onClick={saveCategory}>save Category</button>
         </div>
     )
 }

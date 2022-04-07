@@ -14,6 +14,19 @@ import axios from 'axios';
 function* sagaWatcher() {
     yield takeEvery('FETCH_GIPHYS', fetchGiphys);
     yield takeEvery('FETCH_CATEGORIES', fetchCategories);
+    yield takeEvery('SET_CATEGORY', setCategory);
+}
+
+function* setCategory(action) {
+    try {
+        yield axios.put(`/api/category/${action.payload}`);
+        yield put({
+            type: 'FETCH_GIPHYS'
+        })
+    } catch (err) {
+        console.log(err);
+        
+    }
 }
 
 function* fetchCategories() {
