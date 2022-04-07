@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   // return all categories
-  const queryText = `SELECT * FROM favorites ORDER BY url ASC`;
+  const queryText = `SELECT * FROM favorites ORDER BY id`;
   pool
     .query(queryText)
     .then((result) => {

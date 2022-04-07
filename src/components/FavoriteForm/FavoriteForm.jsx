@@ -10,8 +10,6 @@ function FavoriteForm() {
 
 
     useEffect(() => {
-
-
         dispatch({ type: 'GET_FAVORITES' })
     }, []);
 
@@ -21,13 +19,13 @@ function FavoriteForm() {
         <div>
             <h1>favoriting happens here</h1>
 
-            <ul>
+            <div>
                 {giphyFavoriteReducer.map((favorite) => {
                     return (
-                        <li key={favorite.id}> {favorite.url} </li>
+                        <img key={favorite.id} src={favorite.url}/> 
                     );
                 })}
-            </ul>
+            </div>
 
 
 
