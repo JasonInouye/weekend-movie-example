@@ -13,6 +13,7 @@ import axios from 'axios';
 
 function* sagaWatcher() {
     yield takeEvery('FETCH_GIPHYS', fetchGiphys);
+    yield takeEvery('MARK_FAVORITE', addFavorite)
     yield takeEvery('FETCH_CATEGORIES', fetchCategories);
     yield takeEvery('SET_CATEGORY', setCategory);
     yield takeEvery('GET_FAVORITES', getFavorites);
@@ -56,6 +57,15 @@ function* fetchGiphys(action) {
     }
 }
 
+function* addFavorite(action) {
+    console.log( 'here is the payload', action.payload);
+    try{
+        yield axios.post('/api/favorite', {url: action.payload});
+        yield put({ type: 'SET_FRUITS' })
+    } catch(err){
+        console.log(err);
+    }
+}
 function* getFavorites() {
     //GET REQUEST!
     try {

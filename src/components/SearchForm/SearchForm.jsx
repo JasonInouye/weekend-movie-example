@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
+import axios from 'axios';
+import SearchItem from '../SearchItem/SearchItem';
 
 function SearchForm() {
     const giphySearchList = useSelector(store => store.giphySearchList);
@@ -18,14 +20,14 @@ function SearchForm() {
             <input type="text" placeholder="search" value={searchString} onChange={(event) => setSearchString(event.target.value)} />
             <button onClick={handleSearchGiphy}>Search</button>
             <div>
-            {giphySearchList.map((giphy, index) => {
-                return (
-                    <div key={index}>
-                    <img src={giphy?.images?.original?.url} />
-                    <button>favorite</button>
-                    </div>
-                );
-            })}
+                {giphySearchList.map((giphySearchList, index) => {
+                    return (
+                        <SearchItem 
+                            key={giphySearchList.id} 
+                            searchItem={giphySearchList.images.original.url} 
+                        />
+                    );
+                })}
             </div>
         </div>
     )
