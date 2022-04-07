@@ -65,6 +65,7 @@ function* addFavorite(action) {
     } catch(err){
         console.log(err);
     }
+}
 function* getFavorites() {
     //GET REQUEST!
     try {
