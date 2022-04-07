@@ -8,28 +8,29 @@ function FavoriteForm() {
     const dispatch = useDispatch();
 
     const [newCategory, setNewCategory] = useState('');
+    let imageDescription = true;
     const giphyFavoriteReducer = useSelector(store => store.giphyFavoriteList);
 
     useEffect(() => {
-        dispatch({
-            type: 'FETCH_CATEGORIES'
-        })
+        // dispatch({
+        //     type: 'FETCH_CATEGORIES'
+        // })
         dispatch({ 
             type: 'GET_FAVORITES' 
         })
     }, []);
 
-    const saveCategory = (id) => {
-        let addCategory = {
-            id,
-            newCategory
-        }
+    // const saveCategory = (id) => {
+    //     let addCategory = {
+    //         id,
+    //         newCategory
+    //     }
 
-        dispatch({
-            type: 'SET_CATEGORY',
-            payload: addCategory
-        })
-    }
+    //     dispatch({
+    //         type: 'SET_CATEGORY',
+    //         payload: addCategory
+    //     })
+    // }
 
     
     return (
@@ -40,8 +41,9 @@ function FavoriteForm() {
                 {giphyFavoriteReducer.map((favorite) => {
                     return (
                         <div key={favorite.id}>
-                            <img src={favorite.url}/> 
-                            <label htmlFor="categories">Choose a category:</label>
+                            { imageDescription ? <img onClick={imageDescription=!imageDescription} src={favorite.url}/>  : <div><img onClick={imageDescription=!imageDescription} src={favorite.url}/><p>{favorite.description}</p></div>}
+                            
+                            {/* <label htmlFor="categories">Choose a category:</label>
                             <select id="categories" name="categories" onChange={(event) => setNewCategory(event.target.value)}>
                             {categoryList.map(category => {
                                 return (
@@ -52,7 +54,7 @@ function FavoriteForm() {
                                 )
                             })}
                             </select>
-                            <button onClick={() => saveCategory(favorite.id)}>save Category</button>
+                            <button onClick={() => saveCategory(favorite.id)}>save Category</button> */}
                         </div>
                     );
                 })}
