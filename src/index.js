@@ -11,24 +11,49 @@ import { takeEvery, put } from 'redux-saga/effects';
 import axios from 'axios';
 
 
-
 function* sagaWatcher() {
     yield takeEvery('FETCH_GIPHYS', fetchGiphys);
     yield takeEvery('MARK_FAVORITE', addFavorite)
+    yield takeEvery('FETCH_CATEGORIES', fetchCategories);
+    yield takeEvery('SET_CATEGORY', setCategory);
+    yield takeEvery('GET_FAVORITES', getFavorites);
+}
+
+function* setCategory(action) {
+    try {
+        yield axios.put(`/api/category`, action.payload);
+        yield put({
+            type: 'FETCH_GIPHYS'
+        })
+    } catch (err) {
+        console.log(err);
+        
+    }
+}
+
+function* fetchCategories() {
+    try {
+        let response = yield axios.get(`/api/category`);
+        
+        yield put({
+            type: 'SET_CATEGORIES',
+            payload: response.data
+        })
+    } catch (err) {
+        console.log(err);
+        
+    }
 }
 
 function* fetchGiphys(action) {
     try {
         let response = yield axios.get(`/api/giphy/${action.payload}`);
-        console.log('fetchGiphys: ', response.data);
-        
         yield put({
             type: 'SET_GIPHYS',
             payload: response.data.data
         })
     } catch (err) {
         console.log(err);
-        
     }
 }
 
@@ -40,6 +65,24 @@ function* addFavorite(action) {
     } catch(err){
         console.log(err);
     }
+function* getFavorites() {
+    //GET REQUEST!
+    try {
+        let response = yield axios.get('/api/favorite')
+        console.log(response.data);
+        //Dispatch
+        yield put({ type: 'SET_FAVORITES', payload: response.data });
+    } catch (err) {
+        console.log(err)
+    }
+
+}
+
+const giphyFavoriteList = (state = [], action) => {
+    if (action.type === 'SET_FAVORITES') {
+        return action.payload;
+    }
+    return state
 }
 
 const giphySearchList = (state = [], action) => {
@@ -49,11 +92,21 @@ const giphySearchList = (state = [], action) => {
     return state
 }
 
+const giphyCategoryList = (state = [], action) => {
+    if (action.type === 'SET_CATEGORIES') {
+        return action.payload;
+    }
+    return state
+}
+
+
 const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(
     combineReducers({
-        giphySearchList
+        giphySearchList,
+        giphyCategoryList,
+        giphyFavoriteList
     }),
     applyMiddleware(sagaMiddleware, logger),
 );
